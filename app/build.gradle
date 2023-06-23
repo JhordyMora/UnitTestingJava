@@ -26,6 +26,9 @@ dependencies {
     // This is the lombok library
     implementation 'org.projectlombok:lombok:1.18.28'
     
+    // Testing
+    testImplementation('junit:junit:4.13.2')
+    
 }
 
 application {
