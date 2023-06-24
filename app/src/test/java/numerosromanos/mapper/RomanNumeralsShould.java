@@ -44,9 +44,8 @@ public class RomanNumeralsShould {
         }        
 
     }
-/* kl
     @Test
-    void returnXCIXwithNinetyNine() {
-        assertEquals(RomanNumerals.arabicToRoman(99), "XCIX");
-    }*/
+    void returnMMDVIIwith2507() {
+        assertEquals(RomanNumerals.arabicToRoman(2507), "MMDVII");
+    }
 }
