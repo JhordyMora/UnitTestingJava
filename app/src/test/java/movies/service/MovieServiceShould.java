@@ -1,7 +1,7 @@
 package movies.service;
 
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.junit.Assert.assertEquals;
+// import static org.junit.Assert.assertEquals;
 
 import java.util.Arrays;
 import java.util.Collection;
