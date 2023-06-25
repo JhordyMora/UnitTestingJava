@@ -28,6 +28,9 @@ dependencies {
     
     // Mockito
     testImplementation "org.mockito:mockito-core:5.4.0"
+
+    // Lombok
+    testImplementation "org.projectlombok:lombok:1.18.20"
 }
 
 application {
