@@ -2,9 +2,7 @@ package numerosromanos.mapper;
 
 import static org.junit.Assert.assertEquals;
 
-import org.junit.Rule;
 import org.junit.jupiter.api.Test;
-import org.junit.rules.ExpectedException;
 
 public class RomanNumeralsShould {
     //@Rule
