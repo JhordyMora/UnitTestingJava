@@ -1,5 +1,14 @@
 package movies.model;
 
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
+@Setter
+@Getter
+@AllArgsConstructor
+@NoArgsConstructor
 public class Movie {
     private Integer id;
     private String name;
@@ -8,48 +17,6 @@ public class Movie {
 
     public Movie(String name, int minutes, Genre genre){
         this(null, name, minutes, genre);
-    }
-
-    public Movie(Integer id, String name, int minutes, Genre genre) {
-        this.id = id;
-        this.name = name;
-        this.minutes = minutes;
-        this.genre = genre;
-    }
-
-    public Movie() {
-    }
-
-    public Integer getId() {
-        return id;
-    }
-
-    public void setId(Integer id) {
-        this.id = id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public int getMinutes() {
-        return minutes;
-    }
-
-    public void setMinutes(int minutes) {
-        this.minutes = minutes;
-    }
-
-    public Genre getGenre() {
-        return genre;
-    }
-
-    public void setGenre(Genre genre) {
-        this.genre = genre;
     }
 
 }
