@@ -44,7 +44,7 @@ public class MovieServiceShould {
 
         Collection<Movie> comedyMovies = movieService.findMoviesByGenre(Genre.COMEDY);
 
-        List<Integer> comedyMoviesId = comedyMovies.stream().map(movie -> movie.getId()).collect(Collectors.toList());
+        List<Integer> comedyMoviesId = getMoviesIds(comedyMovies);
 
         assertThat(comedyMoviesId, CoreMatchers.is(Arrays.asList(3, 6)));
         // Posible way to do it 
@@ -61,9 +61,15 @@ public class MovieServiceShould {
                     new Movie(6, "Home Alone", 103, Genre.COMEDY)
         );
         
-        List<Integer> expecteMoviesIds = expectedMoviesByLenght.stream().map(movie -> movie.getId()).collect(Collectors.toList());
+        List<Integer> expecteMoviesIds = getMoviesIds(expectedMoviesByLenght);
 
         assertEquals(moviesLengthIds,expecteMoviesIds);
+    }
+
+    private List<Integer> getMoviesIds(Collection<Movie> movies) {
+        // Alternativa
+        // return movies.stream().map(movie -> movie.getId()).collect(Collectors.toList());
+        return movies.stream().map(Movie::getId).collect(Collectors.toList());
     }
 
     
