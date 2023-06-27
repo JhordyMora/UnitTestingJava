@@ -18,7 +18,6 @@ import org.springframework.jdbc.datasource.init.ScriptUtils;
 
 import movies.model.Genre;
 import movies.model.Movie;
-import movies.service.MovieService;
 
 import static org.hamcrest.CoreMatchers.*;
 
@@ -45,7 +44,9 @@ public class MovieRepositoryIntegrationShould {
         );
 
         assertEquals(movies, moviesExpected);
-        /*assertThat(movies, is(Arrays.asList(
+        /*
+        other way to do it
+        assertThat(movies, is(Arrays.asList(
                 new Movie(1, "Dark Knight", 152, Genre.ACTION),
                 new Movie(2, "Memento", 113, Genre.THRILLER),
                 new Movie(3, "Matrix", 136, Genre.ACTION)
