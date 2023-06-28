@@ -4,11 +4,14 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertThat;
 
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.Arrays;
 import java.util.Collection;
 
 import javax.sql.DataSource;
 
+import org.junit.After;
+import org.junit.Before;
 import org.junit.Test;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -22,17 +25,25 @@ import movies.model.Movie;
 import static org.hamcrest.CoreMatchers.*;
 
 public class MovieRepositoryIntegrationShould {
-    @Test
-    public void loadAllMovies() throws ScriptException, SQLException {
-
-        DataSource dataSource =
+    private MovieRepositoryJdbc movieRepositoryJdbc;
+    DataSource dataSource;
+    
+    @Before
+    public void beforeClass() throws ScriptException, SQLException {
+        dataSource =
                 new DriverManagerDataSource("jdbc:h2:mem:test;MODE=MYSQL", "sa", "sa");
 
         ScriptUtils.executeSqlScript(dataSource.getConnection(), new ClassPathResource("sql-scripts/test-data.sql"));
 
         JdbcTemplate jdbcTemplate = new JdbcTemplate(dataSource);
 
-        MovieRepositoryJdbc movieRepositoryJdbc = new MovieRepositoryJdbc(jdbcTemplate);
+        movieRepositoryJdbc = new MovieRepositoryJdbc(jdbcTemplate);
+
+
+    }    
+    
+    @Test
+    public void loadAllMovies() {
 
         Collection<Movie> movies = movieRepositoryJdbc.findAll();
 
@@ -45,7 +56,7 @@ public class MovieRepositoryIntegrationShould {
 
         assertEquals(movies, moviesExpected);
         /*
-        other way to do it
+        
         assertThat(movies, is(Arrays.asList(
                 new Movie(1, "Dark Knight", 152, Genre.ACTION),
                 new Movie(2, "Memento", 113, Genre.THRILLER),
@@ -55,12 +66,29 @@ public class MovieRepositoryIntegrationShould {
     }
 
     @Test
-    public void testFindById() {
-
+    public void findById() {
+        Movie movie = movieRepositoryJdbc.findById(2);
+        Movie expectedMovie = new Movie(2, "Memento", 113, Genre.THRILLER);
+        assertEquals(movie, expectedMovie);
+        //Collection<Movie> movies = movieRepositoryJdbc.
     }
 
     @Test
-    public void testSaveOrUpdate() {
+    public void saveOrUpdate() {
+        Movie movieDB = new Movie("Super 8", 112, Genre.THRILLER);
+        movieRepositoryJdbc.saveOrUpdate(movieDB);
+        Movie movie = movieRepositoryJdbc.findById(4);
+        Movie movieExpected  = new Movie(4,"Super 8", 112, Genre.THRILLER);
+        assertEquals(movieExpected, movie);
+
 
     }
+
+    @After
+    public void tearDown() throws SQLException {
+        final Statement s = dataSource.getConnection().createStatement();
+        s.execute("drop all objects delete files"); // "Shutdown" is also enough for mem db
+    }
+
+    
 }

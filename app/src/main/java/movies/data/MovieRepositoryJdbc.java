@@ -23,8 +23,9 @@ public class MovieRepositoryJdbc implements iMovieRepository {
 
     @Override
     public Movie findById(long id) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'findById'");
+        Object[] args = { id };
+        return jdbcTemplate.queryForObject("select * from movies where id=?", movieMapper, args);
+
     }
 
     @Override
@@ -34,8 +35,8 @@ public class MovieRepositoryJdbc implements iMovieRepository {
 
     @Override
     public void saveOrUpdate(Movie movie) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'saveOrUpdate'");
+        jdbcTemplate.update("insert into movies (name, minutes, genre) values(?,?,?)",
+        movie.getName(), movie.getMinutes(), movie.getGenre().toString());
     }
 
 }
