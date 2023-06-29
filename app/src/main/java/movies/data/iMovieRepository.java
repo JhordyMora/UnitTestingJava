@@ -11,4 +11,6 @@ public interface iMovieRepository {
     Collection<Movie> findAll();
 
     void saveOrUpdate(Movie movie);
+
+    Collection<Movie> findByName(String name);
 }

@@ -7,6 +7,8 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.stream.Collector;
+import java.util.stream.Collectors;
 
 import javax.sql.DataSource;
 
@@ -55,7 +57,7 @@ public class MovieRepositoryIntegrationShould {
         );
 
         assertEquals(movies, moviesExpected);
-        /*
+        /*uuu
         
         assertThat(movies, is(Arrays.asList(
                 new Movie(1, "Dark Knight", 152, Genre.ACTION),
@@ -80,8 +82,34 @@ public class MovieRepositoryIntegrationShould {
         Movie movie = movieRepositoryJdbc.findById(4);
         Movie movieExpected  = new Movie(4,"Super 8", 112, Genre.THRILLER);
         assertEquals(movieExpected, movie);
+    }
 
+    
 
+    @Test
+    public void returnMoviesWithNameSuperCapital() {
+        Collection<Movie> moviesExpected = Arrays.asList(
+                new Movie ("Super Loco", 139, Genre.COMEDY),
+                new Movie ("Superman", 200, Genre.ACTION)
+        );
+
+        Collection<Movie> moviesDB = movieRepositoryJdbc.findByName("Super");
+        Collection<Movie> moviesFromDb = moviesDB.stream().map(movie -> new Movie(movie.getName(), movie.getMinutes(), movie.getGenre())).collect(Collectors.toList());
+        
+        assertEquals(moviesExpected, moviesFromDb);
+    }
+
+    @Test
+    public void returnMoviesWithNameSuperNoCapital() {
+        Collection<Movie> moviesExpected = Arrays.asList(
+                new Movie ("Super Loco", 139, Genre.COMEDY),
+                new Movie ("Superman", 200, Genre.ACTION)
+        );
+
+        Collection<Movie> moviesDB = movieRepositoryJdbc.findByName("super");
+        Collection<Movie> moviesFromDb = moviesDB.stream().map(movie -> new Movie(movie.getName(), movie.getMinutes(), movie.getGenre())).collect(Collectors.toList());
+        
+        assertEquals(moviesExpected, moviesFromDb);
     }
 
     @After
