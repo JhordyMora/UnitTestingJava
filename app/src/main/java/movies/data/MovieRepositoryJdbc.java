@@ -2,7 +2,6 @@ package movies.data;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.stream.Collector;
 import java.util.stream.Collectors;
 
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -21,7 +20,8 @@ public class MovieRepositoryJdbc implements iMovieRepository {
             rs.getInt("id"),
             rs.getString("name"),
             rs.getInt("minutes"),
-            Genre.valueOf(rs.getString("genre")));
+            Genre.valueOf(rs.getString("genre")),
+            rs.getString("director"));
 
     @Override
     public Movie findById(long id) {
@@ -37,19 +37,12 @@ public class MovieRepositoryJdbc implements iMovieRepository {
 
     @Override
     public void saveOrUpdate(Movie movie) {
-        jdbcTemplate.update("insert into movies (name, minutes, genre) values(?,?,?)",
-                movie.getName(), movie.getMinutes(), movie.getGenre().toString());
+        jdbcTemplate.update("insert into movies (name, minutes, genre, director) values(?,?,?,?)",
+                movie.getName(), movie.getMinutes(), movie.getGenre().toString(), movie.getDirector());
     }
 
     @Override
     public Collection<Movie> findByName(String name) {
-        /*
-         * String nameModified = "%" + name + "%";
-         * Object[] args = { nameModified };
-         * Collection<Movie> result
-         * =jdbcTemplate.query("select * from movies where name like ?", movieMapper,
-         * args);
-         */
         Collection<Movie> allMovies = findAll();
         Collection<Movie> result = allMovies.stream()
                 .filter(movie -> movie.getName().toLowerCase().contains(name.toLowerCase()))
