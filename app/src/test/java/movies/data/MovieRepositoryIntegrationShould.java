@@ -120,6 +120,32 @@ public class MovieRepositoryIntegrationShould {
         assertEquals(moviesExpected, moviesFromDb);
     }
 
+    
+
+    @Test
+    public void returnMoviesFilterByNameMinutesGenderDirector() {
+        List<Movie> moviesExpected = Arrays.asList(
+                new Movie ("Superman", 200, Genre.ACTION, "Superman Director")
+        );
+        
+        List<Movie> moviesActual = movieRepositoryJdbc.filterBy(new Movie("Superman", 200, Genre.ACTION, "Superman Director"));
+
+        assertEquals(moviesExpected, moviesActual);
+    }
+
+    @Test
+    public void returnMoviesFilterGender() {
+        List<Movie> moviesExpected = Arrays.asList(
+                new Movie("Dark Knight", 152, Genre.ACTION, "Dark Knight Director"),
+                new Movie("Matrix", 136, Genre.ACTION, "Matrix Director"),
+                new Movie ("Superman", 200, Genre.ACTION, "Superman Director")
+        );
+        
+        List<Movie> moviesActual = movieRepositoryJdbc.filterBy(new Movie(null, null, Genre.ACTION, null));
+
+        assertEquals(moviesExpected, moviesActual);
+    }
+
     @After
     public void tearDown() throws SQLException {
         final Statement s = dataSource.getConnection().createStatement();

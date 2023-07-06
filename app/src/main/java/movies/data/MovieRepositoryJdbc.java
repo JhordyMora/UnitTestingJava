@@ -2,6 +2,8 @@ package movies.data;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
+import java.util.List;
 import java.util.stream.Collectors;
 
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -48,5 +50,53 @@ public class MovieRepositoryJdbc implements iMovieRepository {
                 .filter(movie -> movie.getName().toLowerCase().contains(name.toLowerCase()))
                 .collect(Collectors.toCollection(ArrayList::new));
         return result;
+    }
+
+    @Override
+    public List<Movie> filterBy(Movie movie) {
+        List<Movie> filteredMovies = Collections.emptyList();
+        if(!(movie.getName()==null)){
+            filteredMovies = (List<Movie>) findByName(movie.getName()).stream()
+                                    .map(movieList-> new Movie(movieList.getName(),movieList.getMinutes(), movieList.getGenre(), movieList.getDirector()))
+                                    .collect(Collectors.toList());;
+        }
+        
+        if(!(movie.getMinutes()==null) && !filteredMovies.isEmpty()){
+            filteredMovies = filteredMovies.stream()
+                                    .filter(movieList -> movieList.getMinutes()<= movie.getMinutes())
+                                    .map(movieList-> new Movie(movieList.getName(),movieList.getMinutes(), movieList.getGenre(), movieList.getDirector()))
+                                    .collect(Collectors.toList());
+        } else if (!(movie.getMinutes()==null) && filteredMovies.isEmpty()){
+            filteredMovies = findAll().stream()
+                                    .filter(movieList -> movieList.getMinutes()<= movie.getMinutes())
+                                    .map(movieList-> new Movie(movieList.getName(),movieList.getMinutes(), movieList.getGenre(), movieList.getDirector()))
+                                    .collect(Collectors.toList());
+        }
+    
+        if(!(movie.getGenre()==null) && !filteredMovies.isEmpty()){
+            filteredMovies = filteredMovies.stream()
+                                    .filter(movieList -> movieList.getGenre().equals(movie.getGenre()))
+                                    .map(movieList-> new Movie(movieList.getName(),movieList.getMinutes(), movieList.getGenre(), movieList.getDirector()))
+                                    .collect(Collectors.toList());
+        } else if (!(movie.getGenre()==null) && filteredMovies.isEmpty()){
+            filteredMovies = findAll().stream()
+                                    .filter(movieList -> movieList.getGenre().equals(movie.getGenre()))
+                                    .map(movieList-> new Movie(movieList.getName(),movieList.getMinutes(), movieList.getGenre(), movieList.getDirector()))
+                                    .collect(Collectors.toList());
+        }
+
+        if(!(movie.getDirector()==null) && !filteredMovies.isEmpty()){
+            filteredMovies = filteredMovies.stream()
+                                    .filter(movieList -> movieList.getDirector().equals(movie.getDirector()))
+                                    .map(movieList-> new Movie(movieList.getName(),movieList.getMinutes(), movieList.getGenre(), movieList.getDirector()))
+                                    .collect(Collectors.toList());
+        } else if (!(movie.getDirector()==null) && filteredMovies.isEmpty()){
+            filteredMovies = findAll().stream()
+                                    .filter(movieList -> movieList.getDirector().equals(movie.getDirector()))
+                                    .map(movieList-> new Movie(movieList.getName(),movieList.getMinutes(), movieList.getGenre(), movieList.getDirector()))
+                                    .collect(Collectors.toList());
+        }
+
+        return filteredMovies;
     }
 }

@@ -1,6 +1,7 @@
 package movies.data;
 
 import java.util.Collection;
+import java.util.List;
 
 import movies.model.Movie;
 
@@ -13,4 +14,6 @@ public interface iMovieRepository {
     void saveOrUpdate(Movie movie);
 
     Collection<Movie> findByName(String name);
+    
+    List<Movie> filterBy(Movie movie);
 }
