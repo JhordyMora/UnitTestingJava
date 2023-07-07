@@ -7,6 +7,7 @@ import static org.mockito.Mockito.timeout;
 
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
@@ -102,9 +103,8 @@ public class MovieRepositoryIntegrationShould {
         );
 
         Collection<Movie> moviesDB = movieRepositoryJdbc.findByName("Super");
-        Collection<Movie> moviesFromDb = moviesDB.stream().map(movie -> new Movie(movie.getName(), movie.getMinutes(), movie.getGenre(), movie.getDirector())).collect(Collectors.toList());
         
-        assertEquals(moviesExpected, moviesFromDb);
+        assertEquals(moviesExpected, moviesDB);
     }
 
     @Test
@@ -115,9 +115,8 @@ public class MovieRepositoryIntegrationShould {
         );
 
         Collection<Movie> moviesDB = movieRepositoryJdbc.findByName("super");
-        Collection<Movie> moviesFromDb = moviesDB.stream().map(movie -> new Movie(movie.getName(), movie.getMinutes(), movie.getGenre(), movie.getDirector())).collect(Collectors.toList());
         
-        assertEquals(moviesExpected, moviesFromDb);
+        assertEquals(moviesExpected, moviesDB);
     }
 
     
@@ -142,6 +141,26 @@ public class MovieRepositoryIntegrationShould {
         );
         
         List<Movie> moviesActual = movieRepositoryJdbc.filterBy(new Movie(null, null, Genre.ACTION, null));
+
+        assertEquals(moviesExpected, moviesActual);
+    }
+    
+    @Test
+    public void returnMoviesFilterByGenderDirector() {
+        List<Movie> moviesExpected = Arrays.asList(
+                new Movie ("Superman", 200, Genre.ACTION, "Superman Director")
+        );
+        
+        List<Movie> moviesActual = movieRepositoryJdbc.filterBy(new Movie(null, null, Genre.ACTION, "Superman Director"));
+
+        assertEquals(moviesExpected, moviesActual);
+    }
+
+    @Test
+    public void returnEmptyListWithNoMatchingMovies(){
+        List<Movie> moviesExpected = new ArrayList<>();
+        
+        List<Movie> moviesActual = movieRepositoryJdbc.filterBy(new Movie(null, null, null, null));
 
         assertEquals(moviesExpected, moviesActual);
     }

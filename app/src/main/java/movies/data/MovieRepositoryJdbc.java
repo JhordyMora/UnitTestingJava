@@ -48,6 +48,7 @@ public class MovieRepositoryJdbc implements iMovieRepository {
         Collection<Movie> allMovies = findAll();
         Collection<Movie> result = allMovies.stream()
                 .filter(movie -> movie.getName().toLowerCase().contains(name.toLowerCase()))
+                .map(movie-> new Movie(movie.getName(),movie.getMinutes(), movie.getGenre(), movie.getDirector()))
                 .collect(Collectors.toCollection(ArrayList::new));
         return result;
     }
